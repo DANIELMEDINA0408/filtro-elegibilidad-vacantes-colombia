@@ -4,12 +4,14 @@
 \usepackage[spanish,es-nodecimaldot]{babel}
 \usepackage[paperwidth=84.1cm,paperheight=118.9cm,margin=2.7cm]{geometry}
 \usepackage{tgheros}
+\usepackage{Alegreya}
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{array}
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{hyperref}
+\usepackage{qrcode}
 \usepackage{parskip}
 \hypersetup{colorlinks=true,urlcolor=uniAzul}
 \definecolor{uniAzul}{RGB}{0,18,130}
@@ -23,9 +25,17 @@
 \renewcommand{\arraystretch}{1.35}
 \renewcommand{\familydefault}{\sfdefault}
 
-\newcommand{\seccion}[1]{\par\noindent{\fontsize{50}{60}\selectfont\color{uniAzul}\bfseries #1}\hfill\raisebox{0.5ex}{\color{uniRojo}\rule{1.6cm}{0.16cm}}\par\vspace{0.45cm}}
-\newcommand{\subseccion}[1]{\par\noindent{\fontsize{38}{46}\selectfont\color{uniRojo}\bfseries #1}\par\vspace{0.28cm}}
-\newcommand{\cuerpo}{\fontsize{40}{49}\selectfont}
+\newcounter{postersection}
+\newcommand{\seccion}[1]{%
+  \stepcounter{postersection}\par\noindent
+  \colorbox{uniRojo}{\parbox[c][1.8cm][c]{1.8cm}{\centering
+    {\fontsize{25}{30}\selectfont\bfseries\color{white}\ifnum\value{postersection}<10 0\fi\arabic{postersection}}%
+  }}\hspace{0.45cm}%
+  {\fontsize{47}{56}\selectfont\rmfamily\color{uniAzul}\bfseries #1}%
+  \par\vspace{0.7cm}%
+}
+\newcommand{\subseccion}[1]{\par\noindent{\fontsize{38}{46}\selectfont\color{uniRojo}\bfseries #1}\par\vspace{0.4cm}}
+\newcommand{\cuerpo}{\fontsize{40}{52}\selectfont}
 \newcommand{\pasocard}[2]{%
   \begin{minipage}[c][6.4cm][c]{0.18\textwidth}
     \fcolorbox{uniAzul}{grisSuave}{%
@@ -40,10 +50,10 @@
 \newcommand{\metricacard}[4]{%
   \begin{minipage}[t]{0.315\textwidth}
     \fcolorbox{#4}{azulClaro}{%
-      \parbox[c][7.3cm][c]{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{%
+      \parbox[c][8cm][c]{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{%
         \centering
-        {\fontsize{32}{39}\selectfont\bfseries #1}\par\vspace{0.25cm}
-        {\fontsize{66}{74}\selectfont\color{#4}\bfseries #2}\par\vspace{0.15cm}
+        {\fontsize{32}{39}\selectfont\bfseries #1}\par\vspace{0.4cm}
+        {\fontsize{66}{74}\selectfont\color{#4}\bfseries #2}\par\vspace{0.3cm}
         {\fontsize{30}{37}\selectfont #3}%
       }%
     }
@@ -61,10 +71,10 @@
   \centering\color{uniRojo}\rule{0.32cm}{11cm}
 \end{minipage}\hfill
 \begin{minipage}[c]{0.78\textwidth}
-  {\fontsize{23}{29}\selectfont\bfseries\color{uniRojo}TALLER N8N | INVESTIGACIÓN APLICADA}\par\vspace{0.4cm}
-  {\fontsize{64}{76}\selectfont\color{uniAzul}\bfseries Del rótulo ``Remote'' a la elegibilidad geográfica}\par\vspace{0.35cm}
-  {\fontsize{37}{45}\selectfont Evaluación de un filtro para alertas de empleo remoto dirigidas a Colombia}\par\vspace{0.5cm}
-  {\fontsize{30}{37}\selectfont\color{uniAzul}\bfseries Andrés Daniel Medina Erazo}\par\vspace{0.6cm}
+  {\fontsize{23}{29}\selectfont\bfseries\color{uniRojo}TALLER N8N | INVESTIGACIÓN APLICADA}\par\vspace{0.55cm}
+  {\fontsize{64}{77}\selectfont\rmfamily\color{uniAzul}\bfseries Del rótulo ``Remote'' a la elegibilidad geográfica}\par\vspace{0.55cm}
+  {\fontsize{37}{46}\selectfont Evaluación de un filtro para alertas de empleo remoto dirigidas a Colombia}\par\vspace{0.7cm}
+  {\fontsize{30}{37}\selectfont\color{uniAzul}\bfseries Andrés Daniel Medina Erazo}\par\vspace{0.8cm}
   {\fontsize{25}{31}\selectfont Universidad del Cauca, Popayán, Colombia, 24 de noviembre de 2026}
 \end{minipage}\hfill
 \begin{minipage}[c]{0.18\textwidth}
@@ -81,7 +91,7 @@
 
 % Pregunta de investigación
 \noindent\colorbox{azulClaro}{\parbox{\dimexpr\textwidth-2\fboxsep}{%
-  {\fontsize{39}{46}\selectfont\color{uniAzul}\bfseries Pregunta de investigación}\par\vspace{0.12cm}
+  {\fontsize{39}{46}\selectfont\color{uniAzul}\bfseries Pregunta de investigación}\par\vspace{0.3cm}
   {\fontsize{36}{44}\selectfont ¿Qué cambia al exigir evidencia de que una vacante remota admite personas ubicadas en Colombia?}
 }}
 
@@ -97,7 +107,7 @@
 
 % Fila 1: problema y lectura principal de los resultados
 \noindent
-\begin{minipage}[t][18cm][t]{0.485\textwidth}
+\begin{minipage}[t][20cm][t]{0.485\textwidth}
   \raggedright
   \seccion{Problema}
   {\cuerpo El filtro inicial del flujo de n8n acepta ``Remote'' o ``Remoto'' como señal de ubicación válida. Sin embargo, la modalidad de trabajo no dice en qué países puede residir la persona contratada. Una oferta remota restringida a otro país puede generar una alerta dirigida a Colombia.}\par\vspace{0.65cm}
@@ -108,7 +118,7 @@
     {\fontsize{31}{38}\selectfont\bfseries\color{uniAzul}Modalidad remota no equivale a\\elegibilidad geográfica}
   }}
 \end{minipage}\hfill
-\begin{minipage}[t][18cm][t]{0.485\textwidth}
+\begin{minipage}[t][20cm][t]{0.485\textwidth}
   \raggedright
   \seccion{Resultados principales}
   {\cuerpo Los 16 anuncios incluían la palabra ``Remote''. La regla original aceptó los 16; ocho de ellos estaban restringidos a otros países. La regla mejorada aceptó los ocho con ``Colombia only'' u ``Open worldwide'' y rechazó los ocho restringidos.}\par\vspace{0.6cm}
@@ -122,7 +132,7 @@
 
 % Fila 2: prototipo y evaluación cuantitativa
 \noindent
-\begin{minipage}[t][18cm][t]{0.485\textwidth}
+\begin{minipage}[t][20cm][t]{0.485\textwidth}
   \raggedright
   \seccion{Prototipo n8n}
   {\cuerpo Flujo de alertas: búsqueda de ofertas, normalización de campos, clasificación geográfica, selección de hasta cinco vacantes y envío de correo HTML.}\par\vspace{0.55cm}
@@ -135,7 +145,7 @@
   \vspace{0.45cm}
   {\fontsize{30}{37}\selectfont Solo los casos confirmados para Colombia pasan a la alerta. Los casos inciertos quedan en una salida de revisión.}
 \end{minipage}\hfill
-\begin{minipage}[t][18cm][t]{0.485\textwidth}
+\begin{minipage}[t][20cm][t]{0.485\textwidth}
   \raggedright
   \seccion{Comparación en el benchmark}
   {\fontsize{35}{42}\selectfont Precisión de las alertas}\par\vspace{0.3cm}
@@ -175,21 +185,30 @@
 
 % Fila 3: procedencia, limitaciones y reproducibilidad
 \noindent
-\begin{minipage}[t][24cm][t]{0.485\textwidth}
+\begin{minipage}[t][26cm][t]{0.485\textwidth}
   \raggedright
   \seccion{Datos y método}
   {\cuerpo Se construyó un benchmark dirigido con 16 anuncios públicos consultados el 24 de noviembre de 2026 en Remotavia. Ocho admitían Colombia (``Colombia only'' u ``Open worldwide'') y ocho restringían la contratación a otros países o regiones.}\par\vspace{0.55cm}
   {\cuerpo La etiqueta geográfica visible en cada anuncio se usó como referencia de clase. La muestra se balanceó deliberadamente para observar falsos positivos y negativos; se calcularon precisión, sensibilidad y exactitud.}\par\vspace{0.55cm}
   {\fontsize{31}{38}\selectfont La muestra es pequeña y no estima la proporción de ofertas elegibles en LinkedIn ni en el mercado laboral.}
 \end{minipage}\hfill
-\begin{minipage}[t][24cm][t]{0.485\textwidth}
+\begin{minipage}[t][26cm][t]{0.485\textwidth}
   \raggedright
   \seccion{Conclusión y alcance}
   {\cuerpo En este benchmark, distinguir el país autorizado de la modalidad remota eliminó ocho falsos positivos y mantuvo una sensibilidad de 100\%. El flujo propone tres estados para enviar solo alertas confirmadas y apartar los casos ambiguos para revisión.}\par\vspace{0.6cm}
   {\fontsize{30}{37}\selectfont La prueba usa etiquetas de un agregador; no son anuncios recolectados con Apify desde LinkedIn. La regla debe validarse con anuncios de LinkedIn y revisión manual antes de interpretar su desempeño en producción.}\par\vspace{0.75cm}
   \subseccion{Reproducibilidad}
-  {\fontsize{30}{37}\selectfont Los flujos n8n, el código, los datos y los documentos están en el repositorio. El benchmark funciona sin credenciales; el flujo operativo requiere configurar Apify y Gmail.}\par\vspace{0.35cm}
-  {\fontsize{21}{27}\selectfont\url{https://github.com/DANIELMEDINA0408/filtro-elegibilidad-vacantes-colombia}}
+  \begin{minipage}[t]{0.72\linewidth}
+    {\fontsize{30}{38}\selectfont Los flujos n8n, el código, los datos y los documentos están en el repositorio. El benchmark funciona sin credenciales; el flujo operativo requiere configurar Apify y Gmail.}\par\vspace{0.35cm}
+    {\fontsize{20}{26}\selectfont\url{https://github.com/DANIELMEDINA0408/filtro-elegibilidad-vacantes-colombia}}
+  \end{minipage}\hfill
+  \begin{minipage}[c]{0.23\linewidth}
+    \centering
+    \fcolorbox{uniAzul}{azulClaro}{\parbox[c][6.2cm][c]{6.2cm}{\centering
+      \qrcode[height=5.2cm]{https://github.com/DANIELMEDINA0408/filtro-elegibilidad-vacantes-colombia}
+    }}\\[0.2cm]
+    {\fontsize{22}{27}\selectfont\bfseries\color{uniAzul}Código y datos}
+  \end{minipage}
 \end{minipage}
 
 \vspace{0.7cm}
