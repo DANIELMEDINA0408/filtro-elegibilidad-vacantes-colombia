@@ -1,0 +1,42 @@
+{
+  "name": "Prototipo - comparación del filtro de vacantes remotas",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "a8d9270e-7dbb-437f-9b48-a435a8d9361a",
+      "name": "Iniciar comparación",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const datos = [\n{ id: 'V01', titulo: 'Sr. AI Product Manager', empresa: 'Robots & Pencils', ubicacion: 'Remote in set countries', elegibilidad: 'Colombia only', clase_real: 1 },\n{ id: 'V02', titulo: 'Master DataOps Colombia', empresa: 'CI&T', ubicacion: 'Remote in set countries', elegibilidad: 'Colombia only', clase_real: 1 },\n{ id: 'V03', titulo: 'Accountant Analyst', empresa: 'Adaptive Teams', ubicacion: 'Remote in set countries', elegibilidad: 'Colombia only', clase_real: 1 },\n{ id: 'V04', titulo: 'NLP Engineer', empresa: 'Social Discovery Ventures', ubicacion: 'Worldwide remote', elegibilidad: 'Open worldwide', clase_real: 1 },\n{ id: 'V05', titulo: 'Senior ML Engineer', empresa: 'Social Discovery Ventures', ubicacion: 'Worldwide remote', elegibilidad: 'Open worldwide', clase_real: 1 },\n{ id: 'V06', titulo: 'Senior Frontend Developer', empresa: 'Social Discovery Ventures', ubicacion: 'Worldwide remote', elegibilidad: 'Open worldwide', clase_real: 1 },\n{ id: 'V07', titulo: 'Senior .NET Developer (Fintech)', empresa: 'Social Discovery Ventures', ubicacion: 'Worldwide remote', elegibilidad: 'Open worldwide', clase_real: 1 },\n{ id: 'V08', titulo: 'Backend Engineer Data and Integrations', empresa: 'Solen Software Group', ubicacion: 'Worldwide remote', elegibilidad: 'Open worldwide', clase_real: 1 },\n{ id: 'V09', titulo: 'Production QC Associate', empresa: 'Drips', ubicacion: 'Remote in set countries', elegibilidad: 'United States only', clase_real: 0 },\n{ id: 'V10', titulo: 'Site Technology Specialist', empresa: 'PSI CRO', ubicacion: 'Remote in set countries', elegibilidad: 'Canada only', clase_real: 0 },\n{ id: 'V11', titulo: 'Site Technology Specialist', empresa: 'PSI CRO', ubicacion: 'Remote in set countries', elegibilidad: 'Mexico only', clase_real: 0 },\n{ id: 'V12', titulo: 'Consultant Relations Manager', empresa: 'Modern Health', ubicacion: 'Remote in set countries', elegibilidad: 'United States only', clase_real: 0 },\n{ id: 'V13', titulo: 'Sr Administrative Assistant', empresa: 'RR Donnelley', ubicacion: 'Remote in a region', elegibilidad: 'Israel and United States', clase_real: 0 },\n{ id: 'V14', titulo: 'Manager GTM Engineering TAM and Outbound', empresa: 'Tebra', ubicacion: 'Remote in set countries', elegibilidad: 'United States only', clase_real: 0 },\n{ id: 'V15', titulo: 'Senior Fullstack Developer Java and React Brazil', empresa: 'CI&T', ubicacion: 'Remote in set countries', elegibilidad: 'Brazil only', clase_real: 0 },\n{ id: 'V16', titulo: 'Senior Account Executive DACH', empresa: 'Veracode', ubicacion: 'Remote in a region', elegibilidad: 'United Kingdom and Germany', clase_real: 0 }\n];\nreturn datos.map(v => ({ json: v }));"
+      },
+      "id": "0c5c9970-a810-4aa8-84f6-88edf8bca4a0",
+      "name": "Cargar muestra etiquetada",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all().map(({ json }) => {\n  const baseline = /remote|remoto/i.test(json.ubicacion);\n  const elegible = /^(colombia only|open worldwide)$/i.test(json.elegibilidad.trim());\n  return { json: { ...json, baseline: Number(baseline), mejorado: Number(elegible) } };\n});\nconst metricas = {};\nfor (const regla of ['baseline', 'mejorado']) {\n  const tp = items.filter(x => x.json[regla] === 1 && x.json.clase_real === 1).length;\n  const fp = items.filter(x => x.json[regla] === 1 && x.json.clase_real === 0).length;\n  const fn = items.filter(x => x.json[regla] === 0 && x.json.clase_real === 1).length;\n  const tn = items.filter(x => x.json[regla] === 0 && x.json.clase_real === 0).length;\n  metricas[regla] = { tp, fp, fn, tn, precision: tp / (tp + fp), recall: tp / (tp + fn), exactitud: (tp + tn) / items.length };\n}\nreturn [{ json: { muestra: items.map(x => x.json), metricas } }];"
+      },
+      "id": "e3795432-1da7-44a6-8380-b5d56552e9a2",
+      "name": "Comparar reglas y métricas",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [480, 0]
+    }
+  ],
+  "connections": {
+    "Iniciar comparación": { "main": [[{ "node": "Cargar muestra etiquetada", "type": "main", "index": 0 }]] },
+    "Cargar muestra etiquetada": { "main": [[{ "node": "Comparar reglas y métricas", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "versionId": "2c39ea0b-bf50-4280-abdb-e47e87a639af",
+  "meta": { "templateCredsSetupCompleted": false },
+  "tags": []
+}

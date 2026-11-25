@@ -1,0 +1,230 @@
+{
+  "name": "Alerta de empleo LinkedIn - elegibilidad Colombia",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "id": "bb4b5b89-27a9-4af4-b413-5957f10d919f",
+      "name": "Programar cada día",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/curious_coder~linkedin-jobs-scraper/run-sync-get-dataset-items?token=REEMPLAZA_CON_TU_TOKEN&maxItems=20",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"urls\": [\n    \"https://www.linkedin.com/jobs/search/?keywords=Desarrollador+Java+Spring+Boot&location=Colombia&f_TPR=r86400&f_E=2,3&sortBy=DD\",\n    \"https://www.linkedin.com/jobs/search/?keywords=Ingeniero+de+Sistemas&location=Colombia&f_TPR=r86400&f_E=2,3&sortBy=DD\",\n    \"https://www.linkedin.com/jobs/search/?keywords=Full+Stack+React+Java&location=Colombia&f_TPR=r86400&f_E=2,3&f_WT=2&sortBy=DD\"\n  ],\n  \"count\": 15,\n  \"scrapeCompany\": false\n}",
+        "options": {}
+      },
+      "id": "f58f313a-1f71-4ebc-aebf-6e581d99da1a",
+      "name": "Buscar ofertas en Apify",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const excluir = /\\b(senior|sr|lead|principal|manager|head|trainee|intern|practicante|pasante|arquitecto)\\b/i;\nconst textoPlano = value => String(value || '').normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase();\nconst listaPaises = ['united states', 'usa', 'canada', 'mexico', 'brazil', 'brasil', 'united kingdom', 'germany', 'israel', 'india', 'australia', 'spain', 'france', 'argentina', 'chile', 'peru', 'colombia'];\nfunction decidir(location, description) {\n  const ubicacion = textoPlano(location);\n  const descripcion = textoPlano(description);\n  const texto = `${ubicacion}\\n${descripcion}`;\n  const colombiaExplicita = /\\b(colombia only|remote in colombia|located in colombia|based in colombia|candidates? (?:must be )?located in colombia|applicants? (?:must be )?located in colombia|open to candidates in colombia|work from colombia)\\b/.test(texto);\n  const mundialExplicito = /\\b(open worldwide|worldwide remote|open to applicants worldwide|any country|work from anywhere)\\b/.test(texto);\n  const restringidoAOtroPais = listaPaises.some(pais => pais !== 'colombia' && new RegExp(`\\\\b${pais.replace(/ /g, '[ -]')} only\\\\b`).test(texto));\n  if (restringidoAOtroPais) return 'NO_COLOMBIA';\n  if (colombiaExplicita || mundialExplicito) return 'COLOMBIA';\n  return 'REVISAR';\n}\nreturn $input.all().map(({ json }) => {\n  const title = json.title || '';\n  const description = json.descriptionText || json.descriptionHtml || '';\n  const location = json.location || json.jobLocation || '';\n  const url = json.url || json.link || json.jobUrl || '';\n  const elegibilidad = decidir(location, description);\n  return { json: { title, company: json.companyName || json.company || '', location, description: String(description).replace(/<[^>]*>/g, '').slice(0, 500), url, elegibilidad } };\n}).filter(({ json }) => json.url && !excluir.test(json.title));"
+      },
+      "id": "ac2ade75-a9d4-470e-9c18-d9f1e6b6fc6f",
+      "name": "Normalizar y clasificar",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "eligibilidad-colombia",
+              "leftValue": "={{ $json.elegibilidad }}",
+              "rightValue": "COLOMBIA",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "9c900fda-b420-481f-ac61-37a5dd5be0a0",
+      "name": "Dejar solo elegibles confirmadas",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "maxItems": 5
+      },
+      "id": "5f78a62f-01e0-411d-a9df-dfdbedca1582",
+      "name": "Limitar a cinco ofertas",
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        960,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const escapeHtml = value => String(value || '').replace(/[&<>]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[ch])).split(String.fromCharCode(34)).join('&quot;').split(String.fromCharCode(39)).join('&#39;');\nconst ofertas = $input.all();\nlet html = `<h2>Ofertas remotas confirmadas para Colombia (${ofertas.length})</h2><ul>`;\nfor (const { json } of ofertas) {\n  const href = /^https:\\//i.test(json.url) ? json.url : '#';\n  html += `<li><b>${escapeHtml(json.title)}</b> - ${escapeHtml(json.company)}<br>Ubicación: ${escapeHtml(json.location)}<br><a href=\"${escapeHtml(href)}\">Ver oferta</a></li>`;\n}\nif (!ofertas.length) html = '<p>No hubo ofertas con elegibilidad geográfica confirmada.</p>';\nreturn [{ json: { html, count: ofertas.length } }];"
+      },
+      "id": "c31094ee-53cb-4ead-aa36-335ce0f4253f",
+      "name": "Preparar correo HTML",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "TU_CORREO",
+        "subject": "=Ofertas remotas confirmadas para Colombia: {{ $json.count }}",
+        "message": "={{ $json.html }}",
+        "options": {
+          "emailType": "html"
+        }
+      },
+      "id": "bc831004-792c-4db2-9674-19ca563d1a11",
+      "name": "Enviar por Gmail",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().filter(({ json }) => json.elegibilidad === 'REVISAR');"
+      },
+      "id": "9363e03d-5cbb-4e34-808a-728554d9ad18",
+      "name": "Registrar casos para revisión manual",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        320
+      ]
+    }
+  ],
+  "connections": {
+    "Programar cada día": {
+      "main": [
+        [
+          {
+            "node": "Buscar ofertas en Apify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar ofertas en Apify": {
+      "main": [
+        [
+          {
+            "node": "Normalizar y clasificar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalizar y clasificar": {
+      "main": [
+        [
+          {
+            "node": "Dejar solo elegibles confirmadas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dejar solo elegibles confirmadas": {
+      "main": [
+        [
+          {
+            "node": "Limitar a cinco ofertas",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Registrar casos para revisión manual",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limitar a cinco ofertas": {
+      "main": [
+        [
+          {
+            "node": "Preparar correo HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar correo HTML": {
+      "main": [
+        [
+          {
+            "node": "Enviar por Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "3a3d9e6a-1348-4468-8e60-c4687d751231",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}

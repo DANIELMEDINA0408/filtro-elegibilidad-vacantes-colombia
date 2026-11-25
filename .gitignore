@@ -1,0 +1,7 @@
+latex/build/
+latex/*.aux
+latex/*.log
+latex/*.out
+latex/*.xdv
+latex/*.synctex.gz
+latex/build_*.png
