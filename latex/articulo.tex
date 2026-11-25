@@ -11,7 +11,7 @@
 \usepackage{hyperref}
 \hypersetup{colorlinks=true,urlcolor=blue,citecolor=blue,linkcolor=blue}
 
-\title{Efecto de la elegibilidad geográfica en alertas de empleo remoto para Colombia}
+\title{Alertas de empleo remoto para Colombia con n8n: prototipo y evaluación del filtro geográfico}
 
 \author{\IEEEauthorblockN{Andrés Daniel Medina Erazo}
 \IEEEauthorblockA{Universidad del Cauca\\
@@ -21,7 +21,7 @@ Popayán, Colombia}}
 \maketitle
 
 \begin{abstract}
-Una vacante etiquetada como remota puede restringir la residencia de quienes postulan. Se evaluó una modificación a un flujo de n8n para no equiparar modalidad remota con elegibilidad en Colombia. Se construyó un benchmark dirigido de 16 vacantes públicas consultadas el 24 de noviembre de 2026, ocho abiertas a Colombia y ocho restringidas a otros países o regiones. La regla de referencia, que acepta cualquier ubicación con la palabra ``remote'', obtuvo 50\% de precisión y 50\% de exactitud. Una regla que acepta etiquetas explícitas ``Colombia only'' o ``Open worldwide'' obtuvo 100\% en ambas métricas y conservó 100\% de sensibilidad en este conjunto. La comparación muestra el efecto de este falso positivo en la muestra seleccionada. El tamaño, la selección dirigida y el uso de un agregador limitan la generalización. El flujo operativo devuelve los estados Colombia, no Colombia y revisar, para reservar la decisión cuando la descripción no ofrece evidencia suficiente.
+Se presenta un prototipo en n8n que busca facilitar la búsqueda de empleo desde Colombia mediante un correo diario con hasta cinco vacantes remotas de LinkedIn. El flujo requiere evidencia de elegibilidad geográfica para incluir una oferta y deriva los casos ambiguos a revisión. Se evaluó este criterio en una muestra dirigida de 16 vacantes públicas de Remotavia consultadas el 24 de noviembre de 2026. Ocho admitían Colombia o tenían apertura mundial y ocho estaban restringidas a otros países o regiones. La regla de referencia aceptó 16 vacantes, de las cuales ocho eran elegibles. La regla basada en etiquetas explícitas seleccionó las ocho elegibles. La precisión pasó de 50\% a 100\% y la sensibilidad fue de 100\% con ambas reglas en la muestra. Quedan por evaluar la clasificación de anuncios de LinkedIn y el ahorro de tiempo para los usuarios del prototipo.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -29,9 +29,9 @@ n8n, automatización, vacantes remotas, elegibilidad geográfica, Colombia
 \end{IEEEkeywords}
 
 \section{Introducción}
-El flujo del taller consulta ofertas de LinkedIn con Apify, limpia campos y envía un máximo de cinco resultados por correo. Su filtro geográfico acepta ubicaciones que contienen ``Colombia'', ``Remote'', ``Bogot'', ``Medell'' o ``Remoto'' [1]. La condición ``Remote'' expresa modalidad de trabajo, pero por sí sola no indica desde qué países permite contratar una empresa.
+El taller propone automatizar parte de la búsqueda de empleo desde Colombia con un flujo de n8n que consulta ofertas de LinkedIn con Apify, limpia campos y prepara un correo diario con hasta cinco resultados y enlaces [1]. Su filtro geográfico acepta ubicaciones que contienen ``Colombia'', ``Remote'', ``Bogot'', ``Medell'' o ``Remoto''. La condición ``Remote'' expresa modalidad de trabajo. El anuncio puede limitar la contratación a países específicos.
 
-Este trabajo pregunta qué cambia al exigir evidencia de que una vacante admite personas ubicadas en Colombia. El aporte es un prototipo de filtro de tres estados y una comparación reproducible sobre anuncios públicos con etiquetas explícitas de elegibilidad.
+El objetivo del prototipo es reunir oportunidades pertinentes en un solo correo. La evaluación aborda una pregunta concreta: ¿cuántas ofertas elegibles conserva el resumen y cuántas restringidas evita cuando se exige evidencia geográfica? Se entrega un flujo de alertas con clasificación en tres estados y una comparación reproducible sobre anuncios públicos.
 
 \section{Método}
 Se tomaron 16 vacantes del índice de empleo remoto de Remotavia, que muestra etiquetas de los países admitidos [2], [3]. La captura se realizó el 24 de noviembre de 2026. La selección fue dirigida y equilibrada: ocho anuncios etiquetados ``Colombia only'' u ``Open worldwide'' y ocho restringidos a Estados Unidos, Canadá, México, Brasil o regiones que excluían a Colombia. Se registraron título, empresa, texto de ubicación, etiqueta, clase de referencia y URL en el archivo CSV del proyecto. La etiqueta del índice se usó como referencia de elegibilidad.
@@ -65,7 +65,7 @@ La comparación aísla una diferencia entre modalidad y lugar de contratación. 
 El flujo mejorado distingue evidencia positiva explícita, restricciones a otros países y casos inciertos. Un anuncio de LinkedIn puede no exponer una etiqueta normalizada equivalente. En ese caso, la clasificación textual debe conservar ``revisar'' si no hay evidencia suficiente; un resultado automatizado no confirma por sí mismo condiciones contractuales. La conexión real a Apify requiere credenciales externas y no se ejecutó para esta evaluación.
 
 \section{Conclusión}
-En los 16 anuncios seleccionados, aceptar cualquier oferta ``Remote'' produjo ocho falsos positivos geográficos. La regla de elegibilidad explícita eliminó esos errores sin perder anuncios elegibles del benchmark. Se entrega un flujo n8n importable para comparar ambas reglas y una adaptación operativa que reserva la alerta para casos confirmados. La siguiente validación necesaria es contrastar su lectura de descripciones originales de LinkedIn con etiquetas revisadas manualmente.
+El prototipo reúne en un correo diario enlaces a vacantes que muestran evidencia de admitir postulaciones desde Colombia. En la muestra de Remotavia, exigir una etiqueta explícita dejó fuera ocho ofertas restringidas y conservó las ocho vacantes elegibles. Se entrega un flujo n8n importable para reproducir la comparación y una adaptación operativa para preparar el correo. El siguiente paso es contrastar la clasificación del flujo con una revisión manual de anuncios de LinkedIn y medir su efecto en el tiempo de búsqueda.
 
 \begin{thebibliography}{00}
 \bibitem{guia} J. A. Zúñiga Daza, B. H. Meneses Macías y E. L. Restrepo Gaviria, ``Taller n8n: Alerta Empleo Colombia LinkedIn. Guía paso a paso detallada,'' material de taller suministrado, s. f.

@@ -1,218 +1,215 @@
-\documentclass[12pt]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
+% Adaptación de University of Copenhagen Poster, Rud Faden (CC BY 4.0).
+% https://www.overleaf.com/latex/templates/university-of-copenhagen-poster/mvwzsncnpgsw
+% Compilar con XeLaTeX o Tectonic.
+\documentclass[a0,portrait]{a0poster}
+\usepackage[paperwidth=84.1cm,paperheight=118.9cm,margin=3.2cm]{geometry}
 \usepackage[spanish,es-nodecimaldot]{babel}
-\usepackage[paperwidth=84.1cm,paperheight=118.9cm,margin=2.7cm]{geometry}
-\usepackage{tgheros}
 \usepackage{Alegreya}
 \usepackage{graphicx}
 \usepackage{xcolor}
-\usepackage{array}
-\usepackage{booktabs}
-\usepackage{tabularx}
 \usepackage{hyperref}
 \usepackage{qrcode}
-\usepackage{parskip}
-\hypersetup{colorlinks=true,urlcolor=uniAzul}
+
 \definecolor{uniAzul}{RGB}{0,18,130}
 \definecolor{uniRojo}{RGB}{173,0,0}
-\definecolor{azulClaro}{RGB}{238,242,255}
-\definecolor{grisSuave}{RGB}{246,247,250}
+\definecolor{tinta}{HTML}{172135}
+\definecolor{secundario}{HTML}{38475F}
+\definecolor{azulClaro}{HTML}{EDF1FA}
+\definecolor{papel}{HTML}{F7F3EB}
+\definecolor{linea}{HTML}{C8D0DE}
+\hypersetup{colorlinks=true,urlcolor=uniAzul,pdftitle={Alertas de empleo remoto para Colombia},pdfauthor={Andrés Daniel Medina Erazo}}
 \graphicspath{{../figuras/}{figuras/}}
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0pt}
-\renewcommand{\arraystretch}{1.35}
-\renewcommand{\familydefault}{\sfdefault}
 
-\newcounter{postersection}
-\newcommand{\seccion}[1]{%
-  \stepcounter{postersection}\par\noindent
-  \colorbox{uniRojo}{\parbox[c][1.8cm][c]{1.8cm}{\centering
-    {\fontsize{25}{30}\selectfont\bfseries\color{white}\ifnum\value{postersection}<10 0\fi\arabic{postersection}}%
-  }}\hspace{0.45cm}%
-  {\fontsize{47}{56}\selectfont\rmfamily\color{uniAzul}\bfseries #1}%
-  \par\vspace{0.7cm}%
-}
-\newcommand{\subseccion}[1]{\par\noindent{\fontsize{38}{46}\selectfont\color{uniRojo}\bfseries #1}\par\vspace{0.4cm}}
-\newcommand{\cuerpo}{\fontsize{40}{52}\selectfont}
-\newcommand{\pasocard}[2]{%
-  \begin{minipage}[c][6.4cm][c]{0.18\textwidth}
-    \fcolorbox{uniAzul}{grisSuave}{%
-      \parbox[c][5.3cm][c]{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{%
-        \centering
-        {\fontsize{24}{30}\selectfont #1}\par\vspace{0.12cm}
-        {\fontsize{30}{37}\selectfont\bfseries\color{uniAzul} #2}%
-      }%
-    }
+\newcommand{\etiqueta}[2][uniRojo]{%
+  {\sffamily\fontsize{28}{35}\selectfont\bfseries\color{#1}#2\par}}
+\newcommand{\tituloSeccion}[1]{%
+  {\rmfamily\fontsize{67}{74}\selectfont\bfseries\color{uniAzul}#1\par}}
+\newcommand{\texto}[1]{%
+  {\sffamily\fontsize{44}{57}\selectfont #1\par}}
+\newcommand{\nota}[1]{%
+  {\sffamily\fontsize{36}{48}\selectfont\color{secundario}#1\par}}
+\newcommand{\panel}[2]{%
+  \begingroup\setlength{\fboxsep}{1.5cm}%
+  \noindent\colorbox{#1}{%
+    \parbox[t]{\dimexpr\linewidth-2\fboxsep\relax}{\raggedright #2}}%
+  \par\endgroup}
+\newcommand{\paso}[3]{%
+  \noindent
+  \begin{minipage}[t]{3.1cm}
+    \vspace{0pt}\etiqueta{#1}
   \end{minipage}%
-}
-\newcommand{\metricacard}[4]{%
-  \begin{minipage}[t]{0.315\textwidth}
-    \fcolorbox{#4}{azulClaro}{%
-      \parbox[c][8cm][c]{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{%
-        \centering
-        {\fontsize{32}{39}\selectfont\bfseries #1}\par\vspace{0.4cm}
-        {\fontsize{66}{74}\selectfont\color{#4}\bfseries #2}\par\vspace{0.3cm}
-        {\fontsize{30}{37}\selectfont #3}%
-      }%
-    }
-  \end{minipage}%
-}
+  \begin{minipage}[t]{\dimexpr\linewidth-3.1cm\relax}
+    \vspace{0pt}\raggedright
+    {\sffamily\fontsize{43}{54}\selectfont\bfseries\color{uniAzul}#2\par}
+    \vspace{0.45cm}\nota{#3}
+  \end{minipage}\par}
+\newcommand{\segmento}[1]{%
+  {\color{#1}\rule{1.43cm}{1.12cm}}\hspace{0.31cm}}
+\newcommand{\ocho}[1]{%
+  \segmento{#1}\segmento{#1}\segmento{#1}\segmento{#1}%
+  \segmento{#1}\segmento{#1}\segmento{#1}\segmento{#1}}
+\newcommand{\leyenda}[2]{%
+  {\color{#1}\rule{0.7cm}{0.7cm}}\hspace{0.35cm}#2}
+\newcommand{\repo}{https://github.com/DANIELMEDINA0408/filtro-elegibilidad-vacantes-colombia}
 
 \begin{document}
-\color{black}
+\raggedright\color{tinta}
 
-% Encabezado sobre blanco con acento vertical rojo y escudo en tarjeta azul clara
-\begingroup
-\setlength{\fboxsep}{0.5cm}
+{\color{uniAzul}\rule{0.89\linewidth}{0.15cm}}%
+{\color{uniRojo}\rule{0.11\linewidth}{0.15cm}}\par
+\vspace{2.15cm}
 \noindent
-\begin{minipage}[c]{0.015\textwidth}
-  \centering\color{uniRojo}\rule{0.32cm}{11cm}
+\begin{minipage}[c]{0.77\linewidth}
+  \raggedright
+  \etiqueta{TALLER N8N / AUTOMATIZACIÓN APLICADA}
+  \vspace{0.95cm}
+  {\rmfamily\fontsize{128}{122}\selectfont\bfseries\color{uniAzul}
+    Alertas de empleo remoto\\para Colombia\par}
+  \vspace{1.05cm}
+  {\sffamily\fontsize{46}{57}\selectfont
+    Un resumen diario de vacantes de LinkedIn por correo\par}
+  \vspace{1.25cm}
+  {\sffamily\fontsize{37}{46}\selectfont\bfseries\color{uniAzul}
+    Andrés Daniel Medina Erazo\par}
+  \vspace{0.7cm}
+  \nota{Universidad del Cauca, Popayán, Colombia}
 \end{minipage}\hfill
-\begin{minipage}[c]{0.78\textwidth}
-  {\fontsize{23}{29}\selectfont\bfseries\color{uniRojo}TALLER N8N | INVESTIGACIÓN APLICADA}\par\vspace{0.55cm}
-  {\fontsize{64}{77}\selectfont\rmfamily\color{uniAzul}\bfseries Del rótulo ``Remote'' a la elegibilidad geográfica}\par\vspace{0.55cm}
-  {\fontsize{37}{46}\selectfont Evaluación de un filtro para alertas de empleo remoto dirigidas a Colombia}\par\vspace{0.7cm}
-  {\fontsize{30}{37}\selectfont\color{uniAzul}\bfseries Andrés Daniel Medina Erazo}\par\vspace{0.8cm}
-  {\fontsize{25}{31}\selectfont Universidad del Cauca, Popayán, Colombia, 24 de noviembre de 2026}
-\end{minipage}\hfill
-\begin{minipage}[c]{0.18\textwidth}
+\begin{minipage}[c]{0.17\linewidth}
   \centering
-  \fcolorbox{uniAzul}{azulClaro}{\parbox[c][10.2cm][c]{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{\centering
-    \includegraphics[height=9.3cm,keepaspectratio]{escudo_universidad_del_cauca.png}
-  }}
-\end{minipage}
-\endgroup
+  \includegraphics[width=9cm,keepaspectratio]{escudo_universidad_del_cauca.png}
+\end{minipage}\par
 
-\vspace{0.45cm}
-{\color{uniRojo}\rule{\textwidth}{0.18cm}}
-\vspace{0.65cm}
-
-% Pregunta de investigación
-\noindent\colorbox{azulClaro}{\parbox{\dimexpr\textwidth-2\fboxsep}{%
-  {\fontsize{39}{46}\selectfont\color{uniAzul}\bfseries Pregunta de investigación}\par\vspace{0.3cm}
-  {\fontsize{36}{44}\selectfont ¿Qué cambia al exigir evidencia de que una vacante remota admite personas ubicadas en Colombia?}
-}}
-
-\vspace{0.65cm}
-
-% Tres cifras para comunicar el resultado de inmediato
-\noindent
-\metricacard{Precisión: regla original}{50\%}{8 falsos positivos en 16 anuncios}{uniRojo}\hfill
-\metricacard{Precisión: regla mejorada}{100\%}{0 falsos positivos en la muestra}{uniAzul}\hfill
-\metricacard{Sensibilidad: ambas reglas}{100\%}{ninguna vacante elegible quedó fuera}{uniAzul}
-
-\vspace{0.9cm}
-
-% Fila 1: problema y lectura principal de los resultados
-\noindent
-\begin{minipage}[t][20cm][t]{0.485\textwidth}
-  \raggedright
-  \seccion{Problema}
-  {\cuerpo El filtro inicial del flujo de n8n acepta ``Remote'' o ``Remoto'' como señal de ubicación válida. Sin embargo, la modalidad de trabajo no dice en qué países puede residir la persona contratada. Una oferta remota restringida a otro país puede generar una alerta dirigida a Colombia.}\par\vspace{0.65cm}
-  \subseccion{Objetivo}
-  {\cuerpo Comparar esa regla con una clasificación que exija evidencia geográfica de elegibilidad para Colombia.}
-  \vspace{0.65cm}
-  \colorbox{grisSuave}{\parbox{\dimexpr\linewidth-2\fboxsep}{\centering
-    {\fontsize{31}{38}\selectfont\bfseries\color{uniAzul}Modalidad remota no equivale a\\elegibilidad geográfica}
-  }}
-\end{minipage}\hfill
-\begin{minipage}[t][20cm][t]{0.485\textwidth}
-  \raggedright
-  \seccion{Resultados principales}
-  {\cuerpo Los 16 anuncios incluían la palabra ``Remote''. La regla original aceptó los 16; ocho de ellos estaban restringidos a otros países. La regla mejorada aceptó los ocho con ``Colombia only'' u ``Open worldwide'' y rechazó los ocho restringidos.}\par\vspace{0.6cm}
-  \subseccion{Ejemplo de falso positivo}
-  {\cuerpo ``Remote in set countries -- United States only'' describe un empleo remoto, pero limita la residencia a Estados Unidos. La palabra ``Remote'' por sí sola no confirma elegibilidad desde Colombia.}
-\end{minipage}
-
-\vspace{0.8cm}
-{\color{uniRojo}\rule{\textwidth}{0.08cm}}
-\vspace{0.65cm}
-
-% Fila 2: prototipo y evaluación cuantitativa
-\noindent
-\begin{minipage}[t][20cm][t]{0.485\textwidth}
-  \raggedright
-  \seccion{Prototipo n8n}
-  {\cuerpo Flujo de alertas: búsqueda de ofertas, normalización de campos, clasificación geográfica, selección de hasta cinco vacantes y envío de correo HTML.}\par\vspace{0.55cm}
-  \subseccion{Tres decisiones geográficas}
-  \begin{tabularx}{\linewidth}{>{\bfseries\color{uniAzul}}p{0.32\linewidth} X}
-    \fontsize{30}{37}\selectfont COLOMBIA & \fontsize{30}{37}\selectfont Evidencia explícita para Colombia o apertura mundial.\\
-    \fontsize{30}{37}\selectfont NO COLOMBIA & \fontsize{30}{37}\selectfont El anuncio restringe la contratación a otros países.\\
-    \fontsize{30}{37}\selectfont REVISAR & \fontsize{30}{37}\selectfont Ubicación ambigua; se conserva para revisión manual.
-  \end{tabularx}
-  \vspace{0.45cm}
-  {\fontsize{30}{37}\selectfont Solo los casos confirmados para Colombia pasan a la alerta. Los casos inciertos quedan en una salida de revisión.}
-\end{minipage}\hfill
-\begin{minipage}[t][20cm][t]{0.485\textwidth}
-  \raggedright
-  \seccion{Comparación en el benchmark}
-  {\fontsize{35}{42}\selectfont Precisión de las alertas}\par\vspace{0.3cm}
-  \begingroup\setlength{\fboxsep}{0pt}
-    {\fontsize{32}{39}\selectfont Regla original}\hfill{\fontsize{32}{39}\selectfont 50\%}\par
-    {\color{uniRojo}\rule{0.50\linewidth}{1.1cm}}\par\vspace{0.3cm}
-    \color{black}{\fontsize{32}{39}\selectfont Regla mejorada}\hfill{\fontsize{32}{39}\selectfont 100\%}\par
-    {\color{uniAzul}\rule{\linewidth}{1.1cm}}\par
-  \endgroup
-  \vspace{0.75cm}
-  {\fontsize{32}{39}\selectfont\bfseries Matriz de clasificación}\par\vspace{0.25cm}
-  {\fontsize{33}{40}\selectfont
-    \begin{tabularx}{\linewidth}{Xrrrr}
-      \toprule
-      Regla & TP & FP & FN & TN \\
-      \midrule
-      Remote/Remoto & 8 & 8 & 0 & 0 \\
-      Elegibilidad explícita & 8 & 0 & 0 & 8 \\
-      \bottomrule
-    \end{tabularx}}
-  \vspace{0.55cm}
-  {\fontsize{31}{38}\selectfont TP: elegible bien detectada; FP: alerta falsa; FN: elegible omitida; TN: restricción bien descartada.}
-\end{minipage}
-
-\vspace{0.35cm}
-{\fontsize{35}{42}\selectfont\color{uniAzul}\bfseries Secuencia del prototipo}\par\vspace{0.25cm}
-\noindent
-\pasocard{01}{Consultar}\hfill{\fontsize{31}{38}\selectfont\color{uniRojo}$\rightarrow$}\hfill
-\pasocard{02}{Normalizar}\hfill{\fontsize{31}{38}\selectfont\color{uniRojo}$\rightarrow$}\hfill
-\pasocard{03}{Clasificar}\hfill{\fontsize{31}{38}\selectfont\color{uniRojo}$\rightarrow$}\hfill
-\pasocard{04}{Filtrar hasta 5}\hfill{\fontsize{31}{38}\selectfont\color{uniRojo}$\rightarrow$}\hfill
-\pasocard{05}{Enviar alerta}
-
-\vspace{0.8cm}
-{\color{uniRojo}\rule{\textwidth}{0.08cm}}
-\vspace{0.65cm}
-
-% Fila 3: procedencia, limitaciones y reproducibilidad
-\noindent
-\begin{minipage}[t][26cm][t]{0.485\textwidth}
-  \raggedright
-  \seccion{Datos y método}
-  {\cuerpo Se construyó un benchmark dirigido con 16 anuncios públicos consultados el 24 de noviembre de 2026 en Remotavia. Ocho admitían Colombia (``Colombia only'' u ``Open worldwide'') y ocho restringían la contratación a otros países o regiones.}\par\vspace{0.55cm}
-  {\cuerpo La etiqueta geográfica visible en cada anuncio se usó como referencia de clase. La muestra se balanceó deliberadamente para observar falsos positivos y negativos; se calcularon precisión, sensibilidad y exactitud.}\par\vspace{0.55cm}
-  {\fontsize{31}{38}\selectfont La muestra es pequeña y no estima la proporción de ofertas elegibles en LinkedIn ni en el mercado laboral.}
-\end{minipage}\hfill
-\begin{minipage}[t][26cm][t]{0.485\textwidth}
-  \raggedright
-  \seccion{Conclusión y alcance}
-  {\cuerpo En este benchmark, distinguir el país autorizado de la modalidad remota eliminó ocho falsos positivos y mantuvo una sensibilidad de 100\%. El flujo propone tres estados para enviar solo alertas confirmadas y apartar los casos ambiguos para revisión.}\par\vspace{0.6cm}
-  {\fontsize{30}{37}\selectfont La prueba usa etiquetas de un agregador; no son anuncios recolectados con Apify desde LinkedIn. La regla debe validarse con anuncios de LinkedIn y revisión manual antes de interpretar su desempeño en producción.}\par\vspace{0.75cm}
-  \subseccion{Reproducibilidad}
-  \begin{minipage}[t]{0.72\linewidth}
-    {\fontsize{30}{38}\selectfont Los flujos n8n, el código, los datos y los documentos están en el repositorio. El benchmark funciona sin credenciales; el flujo operativo requiere configurar Apify y Gmail.}\par\vspace{0.35cm}
-    {\fontsize{20}{26}\selectfont\url{https://github.com/DANIELMEDINA0408/filtro-elegibilidad-vacantes-colombia}}
+\vspace{2.45cm}
+\panel{papel}{%
+  \begin{minipage}[t]{0.55\linewidth}
+    \vspace{0pt}\raggedright
+    \etiqueta{PARA QUIEN BUSCA EMPLEO DESDE COLOMBIA}
+    \vspace{0.6cm}
+    \texto{El prototipo está pensado para reunir en un correo hasta cinco vacantes que admiten postulaciones desde Colombia, con un enlace a cada anuncio.}
   \end{minipage}\hfill
-  \begin{minipage}[c]{0.23\linewidth}
+  \begin{minipage}[t]{0.40\linewidth}
+    \vspace{0pt}\raggedright
+    \etiqueta{EL CRITERIO QUE MEJORAMOS}
+    \vspace{0.6cm}
+    \texto{Una oferta remota puede limitar la contratación a ciertos países. El flujo busca evidencia de que Colombia está admitida antes de incluirla en el correo.}
+  \end{minipage}%
+}
+
+\vspace{3.1cm}
+\noindent
+\begin{minipage}[t]{0.515\linewidth}
+  \vspace{0pt}\raggedright
+  \etiqueta{PROTOTIPO}
+  \vspace{0.35cm}
+  \tituloSeccion{Cómo funciona}
+  \vspace{1.1cm}
+  \paso{01}{Consulta las ofertas}{n8n programa una búsqueda diaria en LinkedIn mediante Apify y normaliza los datos de cada vacante.}
+  \vspace{1.45cm}
+  \paso{02}{Revisa dónde se puede postular}{Si hay evidencia para Colombia, la oferta sigue al correo. Las restricciones a otros países se excluyen. Los casos ambiguos quedan para revisión manual.}
+  \vspace{1.45cm}
+  \paso{03}{Prepara el resumen}{Gmail envía hasta cinco vacantes con el cargo, la empresa, la ubicación y el enlace al anuncio, una vez configuradas las credenciales.}
+
+  \vspace{2.1cm}
+  \panel{azulClaro}{%
+    \etiqueta[uniAzul]{VISTA ILUSTRATIVA DEL CORREO}
+    \vspace{0.72cm}
+    {\rmfamily\fontsize{53}{60}\selectfont\bfseries\color{uniAzul}
+      Ofertas remotas para Colombia\par}
+    \vspace{0.9cm}
+    \panel{white}{%
+      {\sffamily\fontsize{39}{50}\selectfont\bfseries
+        Desarrollador de software\par}
+      \vspace{0.42cm}
+      \nota{Empresa de ejemplo / Colombia}
+      \vspace{0.65cm}
+      \etiqueta[uniAzul]{Ver oferta}%
+    }%
+  }
+\end{minipage}\hfill
+\begin{minipage}[t]{0.443\linewidth}
+  \vspace{0pt}\raggedright
+  \etiqueta{EVALUACIÓN DEL FILTRO}
+  \vspace{0.35cm}
+  \tituloSeccion{Qué mostró la prueba}
+  \vspace{1.1cm}
+  \panel{azulClaro}{%
+    \etiqueta[uniAzul]{ELEGIBLES ENTRE LAS SELECCIONADAS}
+    \vspace{0.8cm}
+    \nota{Regla original: acepta el rótulo «Remote»}
+    \vspace{0.28cm}
+    {\rmfamily\fontsize{76}{80}\selectfont\bfseries\color{uniAzul}
+      8 de 16\par}
+    \vspace{0.38cm}
+    \ocho{uniAzul}\ocho{uniRojo}\par
+    \vspace{1.2cm}
+    \nota{Regla probada: exige una etiqueta explícita}
+    \vspace{0.28cm}
+    {\rmfamily\fontsize{76}{80}\selectfont\bfseries\color{uniAzul}
+      8 de 8\par}
+    \vspace{0.38cm}
+    \ocho{uniAzul}\par
+    \vspace{0.95cm}
+    {\sffamily\fontsize{26}{33}\selectfont
+      \leyenda{uniAzul}{Elegible}\hspace{1.5cm}%
+      \leyenda{uniRojo}{No elegible}\par}
+  }
+  \vspace{1.35cm}
+  \etiqueta{DATOS Y MÉTODO}
+  \vspace{0.5cm}
+  \nota{Muestra dirigida de 16 anuncios públicos de Remotavia, consultados el 24 de noviembre de 2026. Ocho admitían Colombia o tenían apertura mundial y ocho excluían Colombia según la etiqueta publicada. Ambas reglas recuperaron las ocho vacantes elegibles.}
+  \vspace{1.05cm}
+  \etiqueta{ALCANCE}
+  \vspace{0.5cm}
+  \nota{La comparación usa las etiquetas de Remotavia. Quedan por validar la lectura de anuncios de LinkedIn y el ahorro de tiempo para quien busca empleo.}
+\end{minipage}\par
+
+\vspace{2.35cm}
+\noindent{\color{linea}\rule{\linewidth}{0.07cm}}\par
+\vspace{0.9cm}
+\noindent
+\begin{minipage}[t]{0.37\linewidth}
+  \vspace{0pt}\raggedright
+  \etiqueta{UN ANUNCIO DE LA MUESTRA}
+  \vspace{0.35cm}
+  {\sffamily\fontsize{35}{44}\selectfont\bfseries\color{uniAzul}
+    Production QC Associate\par}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.59\linewidth}
+  \vspace{0pt}\raggedright
+  \nota{El anuncio de Drips decía «Remote in set countries» y especificaba «United States only». La regla original lo incluía por el rótulo «Remote». El criterio geográfico lo excluye por la restricción a Estados Unidos.}
+\end{minipage}\par
+\vspace{0.9cm}
+\noindent{\color{linea}\rule{\linewidth}{0.07cm}}\par
+
+\vspace{1.8cm}
+\panel{papel}{%
+  \begin{minipage}[c]{0.83\linewidth}
+    \raggedright
+    \etiqueta{CONCLUSIÓN}
+    \vspace{0.55cm}
+    \texto{En la muestra, exigir elegibilidad explícita evitó incluir ocho ofertas restringidas y conservó las ocho elegibles. Es una mejora concreta para el resumen diario.}
+    \vspace{0.95cm}
+    {\sffamily\fontsize{30}{38}\selectfont\bfseries
+      \href{\repo}{Prototipo n8n, código y datos del estudio}\par}
+    \vspace{0.3cm}
+    {\fontsize{23}{30}\selectfont\expandafter\url\expandafter{\repo}\par}
+  \end{minipage}\hfill
+  \begin{minipage}[c]{0.13\linewidth}
     \centering
-    \fcolorbox{uniAzul}{azulClaro}{\parbox[c][6.2cm][c]{6.2cm}{\centering
-      \qrcode[height=5.2cm]{https://github.com/DANIELMEDINA0408/filtro-elegibilidad-vacantes-colombia}
-    }}\\[0.2cm]
-    {\fontsize{22}{27}\selectfont\bfseries\color{uniAzul}Código y datos}
-  \end{minipage}
-\end{minipage}
+    \begingroup\setlength{\fboxsep}{0.55cm}\color{black}%
+    \colorbox{white}{\qrcode[height=6cm]{https://github.com/DANIELMEDINA0408/filtro-elegibilidad-vacantes-colombia}}%
+    \endgroup
+  \end{minipage}%
+}
 
-\vspace{0.7cm}
-{\color{uniRojo}\rule{\textwidth}{0.12cm}}\\[0.2cm]
-{\fontsize{20}{25}\selectfont Fuentes: guía del taller n8n entregada para el proyecto; Remotavia, páginas de empleos remotos consultadas el 24/11/2026; Manual de Identidad Visual, Universidad del Cauca, 2024. Escudo: Universidad del Cauca, vía Wikimedia Commons, CC BY-SA 4.0. Los enlaces y la atribución completa figuran en el README y el CSV. Colores institucionales: azul RGB (0,18,130), rojo RGB (173,0,0).}
-
+\vspace{1.3cm}
+{\color{linea}\rule{\linewidth}{0.07cm}}\par
+\vspace{0.55cm}
+{\sffamily\fontsize{25}{34}\selectfont\color{secundario}
+  Fuentes: guía del taller de n8n y anuncios públicos de Remotavia. Colores: Manual de Identidad Visual de la Universidad del Cauca (2024).
+  Escudo: Universidad del Cauca, vía Wikimedia Commons (CC BY-SA 4.0).
+  Plantilla base: University of Copenhagen Poster, Rud Faden (CC BY 4.0).\par}
 \end{document}

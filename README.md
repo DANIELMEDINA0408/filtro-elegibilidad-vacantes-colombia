@@ -1,12 +1,14 @@
-# Entrega académica: filtro de vacantes remotas para Colombia
+# Alertas de empleo remoto para Colombia con n8n
 
 Autor: Andrés Daniel Medina Erazo  
 Institución: Universidad del Cauca  
 Lugar y fecha de captura de la muestra: Popayán, 24 de noviembre de 2026
 
+El prototipo busca facilitar la búsqueda de empleo desde Colombia con un correo diario que reúne hasta cinco vacantes de LinkedIn y sus enlaces. La mejora evaluada es el filtro geográfico que decide cuáles pueden aparecer en ese resumen.
+
 ## Entregables
 
-- `latex/poster.tex` y `latex/poster.pdf`: póster A0 vertical, listo para impresión.
+- `latex/poster.tex` y `latex/poster.pdf`: póster A0 vertical, adaptado de la plantilla de la Universidad de Copenhague.
 - `latex/articulo.tex` y `latex/articulo.pdf`: artículo corto en plantilla IEEE.
 - `data/vacantes.csv`: 16 registros públicos etiquetados y sus fuentes.
 - `data/resultados.csv` y `data/metricas.json`: clasificación reproducible.
@@ -30,7 +32,7 @@ Desde esta carpeta, ejecuta:
 node codigo\analizar.js
 ```
 
-El script reescribe `data/resultados.csv` y `data/metricas.json`. Para compilar en Overleaf, sube el proyecto conservando las carpetas `latex/` y `figuras/`, y selecciona `latex/poster.tex` o `latex/articulo.tex` como documento principal. Los PDF incluidos fueron compilados con Tectonic.
+El script reescribe `data/resultados.csv` y `data/metricas.json`. Para compilar en Overleaf, sube el proyecto conservando las carpetas `latex/` y `figuras/`, y selecciona `latex/poster.tex` o `latex/articulo.tex` como documento principal. Para el póster, elige XeLaTeX. Los PDF incluidos fueron compilados con Tectonic.
 
 ## Importación en n8n
 
@@ -43,6 +45,7 @@ El filtro mejorado devuelve tres estados: `COLOMBIA`, `NO_COLOMBIA` y `REVISAR`.
 - Los enlaces de origen de cada observación están en `data/vacantes.csv`. La búsqueda de vacantes colombianas se consultó en <https://remotavia.com/remote-jobs-colombia> y el índice general en <https://remotavia.com/remote-jobs> el 24 de noviembre de 2026.
 - Paleta institucional tomada del Manual de Identidad Visual de la Universidad del Cauca, versión 2024: azul RGB 0, 18, 130 y rojo RGB 173, 0, 0. <https://www.unicauca.edu.co/wp-content/uploads/2024/08/Manual-de-Identidad-Visual_Unicauca_V2024-1.pdf>
 - Escudo descargado de Wikimedia Commons, archivo “Escudo Universidad del Cauca.png”, atribuido a Universidad del Cauca, licencia CC BY-SA 4.0. <https://commons.wikimedia.org/wiki/File:Escudo_Universidad_del_Cauca.png>
+- Plantilla del póster: University of Copenhagen Poster, Rud Faden, licencia CC BY 4.0. <https://www.overleaf.com/latex/templates/university-of-copenhagen-poster/mvwzsncnpgsw>
 
 El escudo conserva su forma original y aparece con atribución. El artículo y el póster identifican las fuentes de los datos y las limitaciones de la muestra.
 
